@@ -1,0 +1,1 @@
+# contao-news-json-ld-types-bundle
