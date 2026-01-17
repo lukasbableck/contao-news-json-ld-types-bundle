@@ -1,45 +1,45 @@
 {
     "name": "lukasbableck/contao-news-json-ld-types-bundle",
     "type": "contao-bundle",
-	"description": "This bundle allows you to select the JSON-LD types Article, NewsArticle and BlogPosting for Contao news archives instead of always using NewsArticle.",
-	"keywords": [
-		"news",
-		"schema",
-		"json-ld",
-		"structured data",
-		"contao",
-		"blog",
-		"article"
-	],
+    "description": "This bundle allows you to select the JSON-LD types Article, NewsArticle and BlogPosting for Contao news archives instead of always using NewsArticle.",
+    "keywords": [
+        "news",
+        "schema",
+        "json-ld",
+        "structured data",
+        "contao",
+        "blog",
+        "article"
+    ],
     "license": "LGPL-3.0-or-later",
-	"authors": [
-		{
-			"name": "Lukas Bableck",
-			"email": "lukas@bableck.dev",
-			"homepage": "https://bableck.dev"
-		}
-	],
+    "authors": [
+        {
+            "name": "Lukas Bableck",
+            "email": "lukas@bableck.dev",
+            "homepage": "https://bableck.dev"
+        }
+    ],
     "require": {
         "php": "^8.2",
         "contao/core-bundle": "^5.3",
         "contao/news-bundle": "^5.3",
-        "symfony/dependency-injection": "^6.4 || ^7.0",
-        "symfony/http-kernel": "^6.4 || ^7.0",
+        "symfony/dependency-injection": "^6.4 || ^7.4",
+        "symfony/http-kernel": "^6.4 || ^7.4",
         "spatie/schema-org": "^3.4"
     },
-	"conflict": {
-		"contao/manager-plugin": "<2.0 || >=3.0"
-	},
-	"require-dev": {
-		"contao/manager-plugin": "^2.0",
-		"friendsofphp/php-cs-fixer": "^3.86"
-	},
+    "conflict": {
+        "contao/manager-plugin": "<2.0 || >=3.0"
+    },
+    "require-dev": {
+        "contao/manager-plugin": "^2.0",
+        "friendsofphp/php-cs-fixer": "^3.86"
+    },
     "autoload": {
         "psr-4": {
             "Lukasbableck\\ContaoNewsJsonLdTypesBundle\\": "src/"
         }
     },
-	"extra": {
-		"contao-manager-plugin": "Lukasbableck\\ContaoNewsJsonLdTypesBundle\\ContaoManager\\Plugin"
-	}
+    "extra": {
+        "contao-manager-plugin": "Lukasbableck\\ContaoNewsJsonLdTypesBundle\\ContaoManager\\Plugin"
+    }
 }

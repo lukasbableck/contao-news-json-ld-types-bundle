@@ -4,24 +4,27 @@ namespace Lukasbableck\ContaoNewsJsonLdTypesBundle\EventListener;
 use Contao\CoreBundle\DependencyInjection\Attribute\AsHook;
 use Contao\CoreBundle\Routing\ResponseContext\JsonLd\JsonLdManager;
 use Contao\CoreBundle\Routing\ResponseContext\ResponseContextAccessor;
-use Contao\LayoutModel;
+use Contao\ModuleModel;
+use Contao\ModuleNewsReader;
 use Contao\NewsModel;
-use Contao\PageModel;
-use Contao\PageRegular;
 use Spatie\SchemaOrg\NewsArticle;
 
-#[AsHook('generatePage')]
 class ModifyJsonLdListener {
     public function __construct(
         private readonly ResponseContextAccessor $responseContextAccessor,
     ) {
     }
 
-    public function __invoke(PageModel $pageModel, LayoutModel $layout, PageRegular $pageRegular): void {
+    #[AsHook('getFrontendModule')]
+    public function onGetFrontendModule(ModuleModel $model, string $buffer, object $module): string {
+        if (!($module instanceof ModuleNewsReader)) {
+            return $buffer;
+        }
+
         $jsonldManager = $this->responseContextAccessor->getResponseContext()->get(JsonLdManager::class);
         $graph = $jsonldManager->getGraphForSchema(JsonLdManager::SCHEMA_ORG);
         if (!($graph->getNodes()[NewsArticle::class] ?? false)) {
-            return;
+            return $buffer;
         }
 
         $newsArticles = $graph->getNodes()[NewsArticle::class];
@@ -58,5 +61,7 @@ class ModifyJsonLdListener {
             $graph->add($newSchemaInstance);
             $graph->hide(NewsArticle::class, $identifier);
         }
+
+        return $buffer;
     }
 }
