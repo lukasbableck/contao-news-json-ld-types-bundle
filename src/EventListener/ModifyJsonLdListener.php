@@ -5,7 +5,7 @@ use Contao\CoreBundle\DependencyInjection\Attribute\AsHook;
 use Contao\CoreBundle\Routing\ResponseContext\JsonLd\JsonLdManager;
 use Contao\CoreBundle\Routing\ResponseContext\ResponseContextAccessor;
 use Contao\ModuleModel;
-use Contao\ModuleNewsReader;
+use Contao\ModuleNews;
 use Contao\NewsModel;
 use Spatie\SchemaOrg\NewsArticle;
 
@@ -17,7 +17,7 @@ class ModifyJsonLdListener {
 
     #[AsHook('getFrontendModule')]
     public function onGetFrontendModule(ModuleModel $model, string $buffer, object $module): string {
-        if (!($module instanceof ModuleNewsReader)) {
+        if (!($module instanceof ModuleNews)) {
             return $buffer;
         }
 
