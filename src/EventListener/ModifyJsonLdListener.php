@@ -65,7 +65,7 @@ class ModifyJsonLdListener {
                 $newSchemaInstance->setProperty($key, $value);
             }
 
-            if($graph->has($newSchemaInstance->getType(), $identifier)) {
+            if($graph->has(get_class($newSchemaInstance), $identifier)) {
                 continue;
             }
 
