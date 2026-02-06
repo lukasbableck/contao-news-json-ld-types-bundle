@@ -4,6 +4,7 @@ namespace Lukasbableck\ContaoNewsJsonLdTypesBundle\EventListener;
 use Contao\CoreBundle\DependencyInjection\Attribute\AsHook;
 use Contao\CoreBundle\Routing\ResponseContext\JsonLd\JsonLdManager;
 use Contao\CoreBundle\Routing\ResponseContext\ResponseContextAccessor;
+use Contao\CoreBundle\Routing\ScopeMatcher;
 use Contao\ModuleModel;
 use Contao\ModuleNews;
 use Contao\NewsModel;
@@ -12,11 +13,16 @@ use Spatie\SchemaOrg\NewsArticle;
 class ModifyJsonLdListener {
     public function __construct(
         private readonly ResponseContextAccessor $responseContextAccessor,
+        private readonly ScopeMatcher $scopeMatcher,
     ) {
     }
 
     #[AsHook('getFrontendModule')]
     public function onGetFrontendModule(ModuleModel $model, string $buffer, object $module): string {
+        if (!$this->scopeMatcher->isFrontendRequest()) {
+            return $buffer;
+        }
+
         if (!($module instanceof ModuleNews)) {
             return $buffer;
         }
@@ -58,8 +64,13 @@ class ModifyJsonLdListener {
             foreach ($newsArticle->getProperties() as $key => $value) {
                 $newSchemaInstance->setProperty($key, $value);
             }
-            $graph->add($newSchemaInstance);
+
+            if($graph->has($newSchemaInstance->getType(), $identifier)) {
+                continue;
+            }
+
             $graph->hide(NewsArticle::class, $identifier);
+            $graph->add($newSchemaInstance, $identifier);
         }
 
         return $buffer;
