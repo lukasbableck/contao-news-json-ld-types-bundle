@@ -9,9 +9,11 @@ use Contao\ModuleModel;
 use Contao\ModuleNews;
 use Contao\NewsModel;
 use Spatie\SchemaOrg\NewsArticle;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class ModifyJsonLdListener {
     public function __construct(
+        private readonly RequestStack $requestStack,
         private readonly ResponseContextAccessor $responseContextAccessor,
         private readonly ScopeMatcher $scopeMatcher,
     ) {
@@ -19,11 +21,15 @@ class ModifyJsonLdListener {
 
     #[AsHook('getFrontendModule')]
     public function onGetFrontendModule(ModuleModel $model, string $buffer, object $module): string {
-        if (!$this->scopeMatcher->isFrontendRequest()) {
+        if (!$request = $this->requestStack->getCurrentRequest()) {
             return $buffer;
         }
 
-        if (!($module instanceof ModuleNews)) {
+        if (!$this->scopeMatcher->isFrontendRequest($request)) {
+            return $buffer;
+        }
+
+        if (!$module instanceof ModuleNews) {
             return $buffer;
         }
 
@@ -65,7 +71,7 @@ class ModifyJsonLdListener {
                 $newSchemaInstance->setProperty($key, $value);
             }
 
-            if($graph->has(get_class($newSchemaInstance), $identifier)) {
+            if ($graph->has($newSchemaInstance::class, $identifier)) {
                 continue;
             }
 
